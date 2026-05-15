@@ -10,6 +10,19 @@ http://auth-center:8001/api
 Authorization: Bearer {access_token}
 ```
 
+## Postman Collection Untuk Semua Service
+Jika ingin langsung memakai API ini di Postman untuk seluruh service SIMRS, import file berikut:
+
+- Collection: `docs/postman/SIMRS-Microservice.postman_collection.json`
+- Environment: `docs/postman/SIMRS-Microservice.postman_environment.json`
+
+Langkah singkat:
+1. Import collection dan environment ke Postman.
+2. Set `base_url` ke URL service lokal kamu, misalnya `http://localhost:8000/api`.
+3. Login lewat request `Auth Center -> Public -> Login User`.
+4. Simpan `access_token` dari response ke variable `access_token`.
+5. Jalankan request lain di folder protected untuk service Registration, Examination, dan Billing.
+
 ---
 
 ## 1. POST /auth/login

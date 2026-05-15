@@ -16,7 +16,7 @@ use Firebase\JWT\Key;
  * 1. Mengecek keberadaan Authorization Bearer token di header
  * 2. Melakukan introspect token ke Auth Center
  * 3. Menyimpan user info di request untuk digunakan di controller
- * 
+ *
  * Usage di routes:
  * Route::middleware(['auth.center'])->group(function () {
  *     Route::post('/billings', [BillingController::class, 'store']);
@@ -50,28 +50,28 @@ class VerifyAuthCenterToken
         try {
             // 1. Ambil token dari Authorization header
             $token = $this->extractBearerToken($request);
-            
+
             if (!$token) {
                 return $this->unauthorizedResponse('Token tidak ditemukan di Authorization header');
             }
 
             // 2. Validasi dan decode token
             $decodedToken = $this->validateToken($token);
-            
+
             if (!$decodedToken) {
                 return $this->unauthorizedResponse('Token tidak valid atau kadaluarsa');
             }
 
             // 3. Verifikasi token ke Auth Center (introspect)
             $tokenInfo = $this->introspectToken($token);
-            
+
             if (!$tokenInfo || !$tokenInfo->get('active', false)) {
                 return $this->unauthorizedResponse('Token tidak aktif di Auth Center');
             }
 
             // 4. Extract user info dari response introspect
             $user = $tokenInfo->get('data', []);
-            
+
             // 5. Store user info ke request untuk digunakan di controller
             $request->merge([
                 'auth_user' => [
@@ -94,7 +94,7 @@ class VerifyAuthCenterToken
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
-            
+
             return $this->unauthorizedResponse('Token verification gagal: ' . $e->getMessage());
         }
     }
@@ -105,7 +105,7 @@ class VerifyAuthCenterToken
     private function extractBearerToken(Request $request): ?string
     {
         $authHeader = $request->header('Authorization');
-        
+
         if (!$authHeader || strpos($authHeader, 'Bearer ') === false) {
             return null;
         }
@@ -127,7 +127,7 @@ class VerifyAuthCenterToken
 
             // Validasi signature JWT dengan secret key
             $decoded = JWT::decode($token, new Key($this->jwtSecret, 'HS256'));
-            
+
             // Cek expiration
             if (isset($decoded->exp) && $decoded->exp < time()) {
                 return null;
@@ -150,7 +150,7 @@ class VerifyAuthCenterToken
         try {
             // Cek cache terlebih dahulu (cache selama 5 menit)
             $cacheKey = 'auth_token_' . hash('sha256', $token);
-            
+
             if (Cache::has($cacheKey)) {
                 return Cache::get($cacheKey);
             }

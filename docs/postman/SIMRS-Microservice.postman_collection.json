@@ -1,0 +1,926 @@
+{
+  "info": {
+    "name": "SIMRS Microservice API",
+    "description": "Postman collection for all SIMRS services: Auth Center, Registration & Queue, Examination & Prescription, and Billing & Pharmacy.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth Center",
+      "item": [
+        {
+          "name": "Public",
+          "item": [
+            {
+              "name": "Login User",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"kasir001\",\n  \"password\": \"password123\",\n  \"client_service\": \"billing_pharmacy\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Login user dari semua service dan simpan access token ke variable access_token."
+              }
+            },
+            {
+              "name": "Introspect Token",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"token\": \"{{access_token}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/auth/introspect",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "introspect"
+                  ]
+                },
+                "description": "Validasi token JWT yang dipakai service lain."
+              }
+            }
+          ]
+        },
+        {
+          "name": "Protected",
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "key": "token",
+                "value": "{{access_token}}",
+                "type": "string"
+              }
+            ]
+          },
+          "item": [
+            {
+              "name": "Logout User",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"token\": \"{{access_token}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/auth/logout",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "logout"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Refresh Token",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/auth/refresh-token",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "refresh-token"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Create User",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"dokter001\",\n  \"password\": \"password123\",\n  \"email\": \"dokter001@hospital.local\",\n  \"full_name\": \"Dr. Ahmad\",\n  \"role\": \"dokter\",\n  \"service_access\": [\"examination_prescription\"],\n  \"is_active\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/users",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "List Users",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/users?page=1&per_page=20",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "20"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Update User",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"full_name\": \"Dr. Ahmad Updated\",\n  \"role\": \"dokter\",\n  \"is_active\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/users/{{user_id}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "{{user_id}}"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Change Password",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"current_password\": \"password123\",\n  \"new_password\": \"NewPassword123!\",\n  \"new_password_confirmation\": \"NewPassword123!\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/users/{{user_id}}/change-password",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "{{user_id}}",
+                    "change-password"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Registration & Queue",
+      "item": [
+        {
+          "name": "Public",
+          "item": [
+            {
+              "name": "Create Registration",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"full_name\": \"Budi Pasien\",\n  \"phone\": \"08123456789\",\n  \"email\": \"budi@email.com\",\n  \"visit_date\": \"2026-05-20\",\n  \"poli_preference\": \"poli_umum\",\n  \"complaint\": \"Sakit kepala dan demam\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/registrations",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "registrations"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Protected",
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "key": "token",
+                "value": "{{access_token}}",
+                "type": "string"
+              }
+            ]
+          },
+          "item": [
+            {
+              "name": "Validate Registration",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"poli_final\": \"poli_umum\",\n  \"examination_type\": \"pemeriksaan_umum\",\n  \"validator_id\": \"emp_0001\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/registrations/{{registration_id}}/validate",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "registrations",
+                    "{{registration_id}}",
+                    "validate"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Registration Detail",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/registrations/{{registration_id}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "registrations",
+                    "{{registration_id}}"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Poli Queues",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/queues/poli",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "queues",
+                    "poli"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Call Queue",
+              "request": {
+                "method": "PUT",
+                "url": {
+                  "raw": "{{base_url}}/queues/poli/{{queue_number}}/call",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "queues",
+                    "poli",
+                    "{{queue_number}}",
+                    "call"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Patient History",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/registrations/patient/{{patient_id}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "registrations",
+                    "patient",
+                    "{{patient_id}}"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Update Registration Status",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"VALIDATED\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/registrations/{{registration_id}}/status",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "registrations",
+                    "{{registration_id}}",
+                    "status"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Examination & Prescription",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{access_token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "Create Examination",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"registration_id\": \"{{registration_id}}\",\n  \"complaint\": \"Sakit kepala\",\n  \"diagnosis\": \"Demam dan sakit kepala\",\n  \"diagnosis_icd10\": \"R51.9\",\n  \"doctor_id\": \"emp_doc_001\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/examinations",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "examinations"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Examination Detail",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/examinations/{{examination_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "examinations",
+                "{{examination_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Prescription",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"examination_id\": \"{{examination_id}}\",\n  \"items\": [\n    {\n      \"medicine_code\": \"med_001\",\n      \"qty\": 10,\n      \"dosage\": \"1-2 tablet, 3x sehari\",\n      \"duration_days\": 5\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/prescriptions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "prescriptions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Prescription Detail",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/prescriptions/{{prescription_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "prescriptions",
+                "{{prescription_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Prescription",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"medicine_code\": \"med_001\",\n      \"qty\": 12,\n      \"dosage\": \"1 tablet, 3x sehari\",\n      \"duration_days\": 7\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/prescriptions/{{prescription_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "prescriptions",
+                "{{prescription_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Examination By Registration",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/examinations/registration/{{registration_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "examinations",
+                "registration",
+                "{{registration_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Finalize Examination",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/examinations/{{examination_id}}/finalize",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "examinations",
+                "{{examination_id}}",
+                "finalize"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Billing & Pharmacy",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{access_token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "Create Billing",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"registration_id\": \"{{registration_id}}\",\n  \"items\": [\n    {\n      \"description\": \"Konsultasi Dokter\",\n      \"amount\": 150000\n    },\n    {\n      \"description\": \"Obat\",\n      \"amount\": 95000\n    }\n  ],\n  \"medicine_cost\": 95000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/billings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "billings"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Billing Detail",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/billings/{{billing_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "billings",
+                "{{billing_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Record Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"billing_id\": \"{{billing_id}}\",\n  \"amount_paid\": 245000,\n  \"payment_method\": \"cash\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/payments",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "payments"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Payment Detail",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/payments/{{payment_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "payments",
+                "{{payment_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Apply Discount",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"discount_type\": \"percentage\",\n  \"discount_value\": 10,\n  \"reason\": \"Diskon promo\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/billings/{{billing_id}}/discount",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "billings",
+                "{{billing_id}}",
+                "discount"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Pharmacy Queue",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prescription_id\": \"{{prescription_id}}\",\n  \"registration_id\": \"{{registration_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/pharmacy/queues",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pharmacy",
+                "queues"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Pharmacy Queues",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/pharmacy/queues",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pharmacy",
+                "queues"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Dispense Medicine",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pharmacy_staff_id\": \"emp_apotik_001\",\n  \"dispensed_date\": \"2026-05-20\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/pharmacy/queues/{{pharmacy_queue_id}}/dispense",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pharmacy",
+                "queues",
+                "{{pharmacy_queue_id}}",
+                "dispense"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Pharmacy Queue Detail",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/pharmacy/queues/{{pharmacy_queue_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pharmacy",
+                "queues",
+                "{{pharmacy_queue_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Billing By Registration",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/billings/registration/{{registration_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "billings",
+                "registration",
+                "{{registration_id}}"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "user_id",
+      "value": "usr_001"
+    },
+    {
+      "key": "registration_id",
+      "value": "reg_2026051300001"
+    },
+    {
+      "key": "patient_id",
+      "value": "pat_001"
+    },
+    {
+      "key": "queue_number",
+      "value": "001"
+    },
+    {
+      "key": "examination_id",
+      "value": "exam_001"
+    },
+    {
+      "key": "prescription_id",
+      "value": "pres_001"
+    },
+    {
+      "key": "billing_id",
+      "value": "bill_001"
+    },
+    {
+      "key": "payment_id",
+      "value": "pay_001"
+    },
+    {
+      "key": "pharmacy_queue_id",
+      "value": "pq_001"
+    }
+  ]
+}

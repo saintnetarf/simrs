@@ -1,10 +1,59 @@
 # Microservice SIMRS - Documentation Index
 
+
+
 Dokumentasi lengkap sistem microservice SIMRS dengan 4 service terintegrasi via Auth Center.
+
+## 🚀 Quick Access
+
+- **📖 [Scramble API Documentation UI](http://localhost:8000/docs/api)** - Interactive API explorer
+- **📄 [OpenAPI JSON Spec](http://localhost:8000/api.json)** - Raw OpenAPI 3.0 specification
+- **� [Postman Collection](./postman/SIMRS-Microservice.postman_collection.json)** - Import semua service ke Postman
+- **🧩 [Postman Environment](./postman/SIMRS-Microservice.postman_environment.json)** - Variable environment untuk testing
+- **�📋 [Scramble Setup Guide](./SCRAMBLE_SETUP.md)** - How to use Scramble documentation
 
 ---
 
-## 📋 Dokumentasi API
+## 🎯 Scramble API Documentation
+
+### [Scramble Installation Summary](./SCRAMBLE_INSTALLATION_SUMMARY.md)
+**Status:** ✅ Sudah diinstall & dikonfigurasi
+- 32 endpoints sudah didokumentasikan
+- OpenAPI 3.0 attributes sudah diimplementasikan
+- UI documentation ready di `/docs/api`
+
+### [Scramble Setup Guide](./SCRAMBLE_SETUP.md)
+Panduan lengkap tentang:
+- Akses dokumentasi UI
+- Export OpenAPI spec
+- Menambah dokumentasi endpoint baru
+- Best practices & troubleshooting
+
+### [Scramble Quick Reference](./SCRAMBLE_QUICK_REFERENCE.md)
+Referensi cepat:
+- Cara test endpoint
+- cURL examples
+- Sample workflow lengkap
+
+### [Production Deployment Guide](./PRODUCTION_DEPLOYMENT.md)
+Checklist untuk deployment ke production:
+- Security configuration
+- Disable documentation access
+- CI/CD pipeline setup
+- Monitoring & logging
+- Disaster recovery
+
+### [Implementation Checklist](./IMPLEMENTATION_CHECKLIST.md)
+Panduan lengkap implementasi setelah dokumentasi:
+- Phase-by-phase tasks
+- Migration & model creation
+- Controller implementation
+- Testing strategy
+- Team task breakdown
+
+---
+
+## 📋 Dokumentasi API (Manual)
 
 ### 1. [Auth Center Service API](./API_AUTH_CENTER.md)
 **Service Kelompok 1** - Authentication & Authorization Center

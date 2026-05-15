@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Middleware untuk verifikasi role user
  * Middleware ini akan mengecek apakah user memiliki role yang diizinkan
- * 
+ *
  * Usage di routes:
  * Route::middleware(['auth.center', 'role:kasir|admin_apotik'])->group(function () {
  *     Route::post('/payments', [PaymentController::class, 'store']);
@@ -33,7 +33,7 @@ class VerifyUserRole
 
         // Cek apakah role user ada di list allowed roles
         $userRole = $authUser['role'] ?? null;
-        
+
         if (!$userRole || !in_array($userRole, $roles)) {
             return $this->forbiddenResponse(
                 "Role '{$userRole}' tidak diizinkan. Hanya role: " . implode(', ', $roles)

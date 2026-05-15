@@ -54,13 +54,13 @@ CREATE TABLE registrations (
   ) DEFAULT 'ONLINE_REGISTERED' COMMENT 'Status alur pasien',
   queue_number VARCHAR(10) COMMENT 'Nomor antrian poli (misal: 001, 002)',
   queue_estimated_time TIME COMMENT 'Estimasi waktu dipanggil',
-  
+
   -- Validator info
   validator_id VARCHAR(36),
   validator_name VARCHAR(255),
   validated_at TIMESTAMP NULL,
   validation_notes TEXT,
-  
+
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE RESTRICT,

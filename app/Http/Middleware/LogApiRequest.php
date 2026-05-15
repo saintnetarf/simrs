@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
  * - Endpoint & Method
  * - Response status
  * - Response time
- * 
+ *
  * Usage di routes atau middleware group:
  * $middleware->push(LogApiRequest::class);
  */
@@ -29,7 +29,7 @@ class LogApiRequest
     {
         $startTime = microtime(true);
         $requestId = $request->header('X-Request-ID') ?? 'req_' . substr(uniqid(), -12);
-        
+
         // Store request info
         $authUser = $request->get('auth_user');
         $requestData = [

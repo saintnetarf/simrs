@@ -13,30 +13,30 @@ CREATE TABLE billings (
   patient_name VARCHAR(255),
   examination_id VARCHAR(36) COMMENT 'Reference ke examination_prescription',
   poli VARCHAR(50),
-  
+
   -- Cost breakdown
   subtotal_service DECIMAL(12, 2) COMMENT 'Total jasa layanan (konsultasi, lab, dll)',
   medicine_cost DECIMAL(12, 2) COMMENT 'Total biaya obat',
   discount_amount DECIMAL(12, 2) DEFAULT 0,
   discount_reason VARCHAR(255),
   discount_approved_by VARCHAR(36),
-  
+
   grand_total DECIMAL(12, 2) COMMENT 'Total yang harus dibayar',
-  
+
   -- Payment status
   status ENUM('BILLED', 'PARTIALLY_PAID', 'PAID', 'CANCELLED') DEFAULT 'BILLED',
   paid_amount DECIMAL(12, 2) DEFAULT 0,
   remaining_amount DECIMAL(12, 2),
-  
+
   -- Metadata
   notes TEXT,
   kasir_id VARCHAR(36),
   kasir_name VARCHAR(255),
   due_date TIMESTAMP,
-  
+
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  
+
   INDEX idx_invoice_number (invoice_number),
   INDEX idx_registration_id (registration_id),
   INDEX idx_patient_id (patient_id),
@@ -54,9 +54,9 @@ CREATE TABLE billing_items (
   quantity INT DEFAULT 1,
   unit_price DECIMAL(12, 2),
   line_number INT,
-  
+
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  
+
   FOREIGN KEY (billing_id) REFERENCES billings(id) ON DELETE CASCADE,
   INDEX idx_billing_id (billing_id),
   INDEX idx_category (category)
@@ -70,26 +70,26 @@ CREATE TABLE payments (
   registration_id VARCHAR(36) NOT NULL,
   patient_id VARCHAR(36) NOT NULL,
   patient_name VARCHAR(255),
-  
+
   amount_paid DECIMAL(12, 2) NOT NULL,
   payment_method ENUM('cash', 'debit_card', 'credit_card', 'bpjs', 'bank_transfer', 'check', 'other') NOT NULL,
-  
+
   -- Payment details
   payment_status ENUM('PENDING', 'PAID', 'FAILED', 'REFUNDED') DEFAULT 'PAID',
   reference_number VARCHAR(100) COMMENT 'Nomor referensi pembayaran (misal: no kartu, no transfer, dll)',
   payment_note TEXT,
-  
+
   -- Kasir info
   kasir_id VARCHAR(36),
   kasir_name VARCHAR(255),
-  
+
   -- Receipt
   receipt_number VARCHAR(50) UNIQUE,
-  
+
   payment_date DATE,
   payment_time TIME,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  
+
   FOREIGN KEY (billing_id) REFERENCES billings(id) ON DELETE RESTRICT,
   INDEX idx_billing_id (billing_id),
   INDEX idx_registration_id (registration_id),
@@ -109,12 +109,12 @@ CREATE TABLE refunds (
   refund_status ENUM('PENDING', 'PROCESSED', 'FAILED') DEFAULT 'PENDING',
   processed_by_id VARCHAR(36),
   processed_by_name VARCHAR(255),
-  
+
   refund_date DATE,
   refund_time TIME,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   processed_at TIMESTAMP NULL,
-  
+
   FOREIGN KEY (payment_id) REFERENCES payments(id) ON DELETE RESTRICT,
   FOREIGN KEY (billing_id) REFERENCES billings(id) ON DELETE RESTRICT,
   INDEX idx_payment_id (payment_id),
@@ -130,17 +130,17 @@ CREATE TABLE pharmacy_queues (
   registration_id VARCHAR(36) NOT NULL,
   patient_id VARCHAR(36) NOT NULL,
   patient_name VARCHAR(255),
-  
+
   queue_number VARCHAR(10) COMMENT 'AP-001, AP-002, dll',
   queue_date DATE NOT NULL,
   queue_status ENUM('PHARMACY_QUEUED', 'IN_PREPARATION', 'READY', 'MEDICINE_DISPENSED', 'CANCELLED') DEFAULT 'PHARMACY_QUEUED',
-  
+
   -- Timing
   arrival_time TIMESTAMP NULL COMMENT 'Waktu pasien tiba',
   called_at TIMESTAMP NULL COMMENT 'Waktu dipanggil',
   preparation_started_at TIMESTAMP NULL,
   dispensed_at TIMESTAMP NULL,
-  
+
   -- Pharmacy staff
   prepared_by_id VARCHAR(36),
   prepared_by_name VARCHAR(255),
@@ -148,12 +148,12 @@ CREATE TABLE pharmacy_queues (
   dispensed_by_name VARCHAR(255),
   verified_by_id VARCHAR(36) COMMENT 'Apotik supervisor yang verifikasi',
   verified_by_name VARCHAR(255),
-  
+
   notes TEXT,
-  
+
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  
+
   INDEX idx_prescription_id (prescription_id),
   INDEX idx_registration_id (registration_id),
   INDEX idx_queue_date (queue_date),
@@ -175,14 +175,14 @@ CREATE TABLE pharmacy_dispensing_items (
   form VARCHAR(50),
   batch_number VARCHAR(100) COMMENT 'Nomor batch obat',
   expiration_date DATE,
-  
+
   dispensed_by_id VARCHAR(36),
   dispensed_by_name VARCHAR(255),
   dispensed_date DATE,
   dispensed_time TIME,
-  
+
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  
+
   FOREIGN KEY (pharmacy_queue_id) REFERENCES pharmacy_queues(id) ON DELETE CASCADE,
   INDEX idx_pharmacy_queue_id (pharmacy_queue_id),
   INDEX idx_medicine_code (medicine_code)
@@ -196,19 +196,19 @@ CREATE TABLE pharmacy_inventory (
   strength VARCHAR(100),
   form VARCHAR(50),
   batch_number VARCHAR(100),
-  
+
   qty INT DEFAULT 0 COMMENT 'Jumlah stok',
   unit VARCHAR(50),
   purchase_price DECIMAL(10, 2),
   selling_price DECIMAL(10, 2),
-  
+
   expiration_date DATE,
   received_date DATE,
-  
+
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  
+
   UNIQUE KEY unique_medicine_batch (medicine_code, batch_number),
   INDEX idx_medicine_code (medicine_code),
   INDEX idx_expiration_date (expiration_date),
